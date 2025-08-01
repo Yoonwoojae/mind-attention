@@ -1,0 +1,274 @@
+## 🎨 UI 디자인 시스템
+
+### 1. **색상 시스템 (Color System)**
+
+```dart
+// 메인 브랜드 컬러 - 딥 포레스트 그린 계열
+const Color primaryColor = Color(0xFF2D6A4F);      // 진한 녹색
+const Color primaryLight = Color(0xFF52B788);      // 밝은 녹색
+const Color primaryDark = Color(0xFF1B5E3F);       // 어두운 녹색
+
+// 보조 색상 - 따뜻한 코랄 계열
+const Color secondaryColor = Color(0xFFE76F51);    // 코랄
+const Color secondaryLight = Color(0xFFF4A261);    // 라이트 코랄
+
+// 배경 색상
+const Color backgroundColor = Color(0xFFF8F9FA);   // 밝은 회색
+const Color surfaceColor = Color(0xFFFFFFFF);      // 흰색
+const Color cardBackground = Color(0xFFFDFEFE);    // 카드 배경
+
+// 카테고리별 파스텔 색상 (차별화)
+const Map<String, Color> categoryColors = {
+  'productivity': Color(0xFFB8E6B8),      // 민트그린
+  'wellbeing': Color(0xFFDDB8E6),         // 라벤더
+  'daily_routines': Color(0xFFFFD4A3),    // 피치
+  'adhd_challenges': Color(0xFFA3C4FF),   // 스카이블루
+  'organization': Color(0xFFFFB8D1),       // 로즈핑크
+  'relationships': Color(0xFFB8D4E6),      // 파우더블루
+  'self_improvement': Color(0xFFE6CCB8),   // 베이지
+  'unique_perspectives': Color(0xFFC3E6B8), // 라임
+};
+
+// 시스템 색상
+const Color successColor = Color(0xFF40916C);
+const Color warningColor = Color(0xFFE9C46A);
+const Color errorColor = Color(0xFFE76F51);
+const Color infoColor = Color(0xFF264653);
+
+// 텍스트 색상
+const Color textPrimary = Color(0xFF212529);
+const Color textSecondary = Color(0xFF6C757D);
+const Color textHint = Color(0xFFADB5BD);
+```
+
+### 2. **타이포그래피 (Typography)**
+
+```dart
+// 폰트: Inter 또는 Nunito (가독성이 좋은 산세리프)
+const TextTheme appTextTheme = TextTheme(
+  // 제목
+  displayLarge: TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+    letterSpacing: -0.5,
+    height: 1.2,
+  ),
+  displayMedium: TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.w600,
+    letterSpacing: -0.3,
+  ),
+  displaySmall: TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+  ),
+
+  // 본문
+  bodyLarge: TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+  ),
+  bodyMedium: TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+  ),
+
+  // 버튼
+  labelLarge: TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.5,
+  ),
+);
+```
+
+### 3. **컴포넌트 스타일**
+
+#### **카드 디자인**
+```dart
+class AppCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsets? padding;
+  final Color? backgroundColor;
+
+  const AppCard({
+    required this.child,
+    this.padding,
+    this.backgroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: padding ?? EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: backgroundColor ?? cardBackground,
+        borderRadius: BorderRadius.circular(16), // 부드러운 모서리
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+}
+```
+
+#### **버튼 스타일**
+```dart
+// Primary Button - 둥근 모서리, 그라데이션 없음
+ElevatedButton(
+  style: ElevatedButton.styleFrom(
+    backgroundColor: primaryColor,
+    foregroundColor: Colors.white,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+    elevation: 0, // 플랫 디자인
+  ),
+  onPressed: () {},
+  child: Text('Continue'),
+);
+
+// Secondary Button - 아웃라인
+OutlinedButton(
+  style: OutlinedButton.styleFrom(
+    foregroundColor: primaryColor,
+    side: BorderSide(color: primaryColor, width: 2),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+  ),
+  onPressed: () {},
+  child: Text('Skip'),
+);
+```
+
+#### **진행률 표시**
+```dart
+// 커스텀 진행률 바
+class ProgressIndicator extends StatelessWidget {
+  final double progress; // 0.0 ~ 1.0
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 8,
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: FractionallySizedBox(
+        alignment: Alignment.centerLeft,
+        widthFactor: progress,
+        child: Container(
+          decoration: BoxDecoration(
+            color: primaryColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### 4. **레이아웃 규칙**
+
+```dart
+// 간격 시스템 (8의 배수 사용)
+const double spacingXS = 4;
+const double spacingS = 8;
+const double spacingM = 16;
+const double spacingL = 24;
+const double spacingXL = 32;
+const double spacingXXL = 48;
+
+// 패딩 규칙
+const EdgeInsets screenPadding = EdgeInsets.all(16);
+const EdgeInsets cardPadding = EdgeInsets.all(16);
+const EdgeInsets sectionPadding = EdgeInsets.symmetric(vertical: 24);
+
+// 컴포넌트 높이
+const double buttonHeight = 56;
+const double inputHeight = 56;
+const double appBarHeight = 64;
+const double bottomNavHeight = 72;
+```
+
+### 5. **아이콘 시스템**
+
+```dart
+// 커스텀 아이콘 사용 (Phosphor Icons 또는 Feather Icons)
+// inflow와 다른 아이콘 세트 사용
+const Map<String, IconData> customIcons = {
+  'home': PhosphorIcons.house,
+  'learn': PhosphorIcons.bookOpen,
+  'community': PhosphorIcons.users,
+  'profile': PhosphorIcons.user,
+  'check': PhosphorIcons.checkCircle,
+  'plant': PhosphorIcons.plant,
+  'star': PhosphorIcons.star,
+  'brain': PhosphorIcons.brain,
+};
+```
+
+### 6. **애니메이션 규칙**
+
+```dart
+// 일관된 애니메이션 지속 시간
+const Duration shortAnimation = Duration(milliseconds: 200);
+const Duration mediumAnimation = Duration(milliseconds: 300);
+const Duration longAnimation = Duration(milliseconds: 500);
+
+// 애니메이션 커브
+const Curve defaultCurve = Curves.easeInOutCubic;
+const Curve bounceCurve = Curves.elasticOut;
+```
+
+### 7. **접근성 고려사항**
+
+```dart
+// ADHD 사용자를 위한 특별 고려사항
+class ADHDFriendlyTheme {
+  // 높은 대비
+  static const double minContrastRatio = 4.5;
+
+  // 큰 터치 영역
+  static const double minTouchTarget = 48.0;
+
+  // 명확한 포커스 표시
+  static const focusDecoration = BoxDecoration(
+    border: Border.all(color: primaryColor, width: 3),
+    borderRadius: BorderRadius.circular(8),
+  );
+
+  // 시각적 피드백
+  static const hapticFeedback = HapticFeedback.lightImpact;
+}
+```
+
+### 8. **차별화 포인트**
+
+1. **색상**: 청록색 대신 포레스트 그린 사용
+2. **모양**: 더 둥근 모서리 (16px vs 12px)
+3. **그림자**: 더 부드럽고 미묘한 그림자
+4. **아이콘**: 다른 아이콘 세트 사용
+5. **레이아웃**: 카드 기반이지만 다른 간격과 비율
+6. **폰트**: 다른 폰트 패밀리 사용
+
+### 9. **법적 안전성 확보**
+
+- ✅ 고유한 색상 팔레트
+- ✅ 다른 아이콘 세트
+- ✅ 독자적인 간격 시스템
+- ✅ 차별화된 컴포넌트 스타일
+- ✅ 고유한 애니메이션 패턴

@@ -32,6 +32,16 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+**/build/
+.packages
+.metadata
+.flutter-plugins-dependencies
+.flutter-plugins
+flutter_*.png
+.last_build_id
+.dart_tool/package_config.json
+.dart_tool/package_config_subset
+.dart_tool/version
 
 # Symbolication related
 app.*.symbols
@@ -43,3 +53,28 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/app/build/
+/android/build/
+/android/.gradle/
+/android/local.properties
+/android/captures/
+/android/.externalNativeBuild/
+/android/gradle.properties
+/android/gradle-wrapper.properties
+
+# iOS related
+/ios/Pods/
+/ios/.symlinks/
+/ios/Flutter/flutter_assets/
+/ios/Flutter/flutter_export_environment.sh
+/ios/Runner.xcworkspace/
+/ios/Runner/GeneratedPluginRegistrant.*
+
+.env
+.env.local
+
+# 키 관련 파일 제외
+android/key.properties
+android/app/upload-keystore.jks
+*.jks
+*.keystore
