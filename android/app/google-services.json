@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "564714186117",
+    "project_id": "mind-attention",
+    "storage_bucket": "mind-attention.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:564714186117:android:a35e7efe4e613adbcc90ec",
+        "android_client_info": {
+          "package_name": "com.mindattention.mind_attention"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "564714186117-g633tfsie65ubeo762th9g6leu6h6ajd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3-uOriJ86xzIUNarO3T3tgBqC0I-rTxg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "564714186117-g633tfsie65ubeo762th9g6leu6h6ajd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "564714186117-58spt8seqh8nt5677r7sqhvue3ifts7q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mindAttention"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
