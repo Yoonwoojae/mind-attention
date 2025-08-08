@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
 
 class AppBenefitsScreen extends StatelessWidget {
   const AppBenefitsScreen({super.key});
@@ -12,7 +13,7 @@ class AppBenefitsScreen extends StatelessWidget {
         'icon': Icons.psychology,
         'title': 'benefit_mindfulness_title',
         'description': 'benefit_mindfulness_description',
-        'color': const Color(0xFF6B73FF),
+        'color': AppColors.primary,
       },
       {
         'icon': Icons.favorite,
@@ -158,7 +159,7 @@ class AppBenefitsScreen extends StatelessWidget {
                     context.go('/push-notification-guide');
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF6B73FF),
+                    backgroundColor: AppColors.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),

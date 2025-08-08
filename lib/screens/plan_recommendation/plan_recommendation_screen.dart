@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
 
 class PlanRecommendationScreen extends StatefulWidget {
   const PlanRecommendationScreen({super.key});
@@ -23,7 +24,7 @@ class _PlanRecommendationScreenState extends State<PlanRecommendationScreen> {
         'training_breathing_feature_2',
         'training_breathing_feature_3',
       ],
-      'color': const Color(0xFF6B73FF),
+      'color': AppColors.primary,
       'icon': Icons.air,
     },
     {
@@ -262,7 +263,7 @@ class _PlanRecommendationScreenState extends State<PlanRecommendationScreen> {
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF6B73FF),
+                    backgroundColor: AppColors.primary,
                     disabledBackgroundColor: Colors.grey[300],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),

@@ -3,8 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:mind_attention/core/utils/logger.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mind_attention/widgets/common/bottom_fixed_button.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -24,32 +25,37 @@ class _OnboardingScreenState extends State<OnboardingScreen> with TickerProvider
     OnboardingContent(
       title: 'onboarding_title_1',
       description: 'onboarding_desc_1',
-      icon: Icons.center_focus_strong,
-      color: const Color(0xFF6B73FF),
+      svgPath: 'assets/images/onboarding/meditation_1.svg',
+      backgroundColor: const Color(0xFFE8F5E9),
+      accentColor: AppColors.primary,
     ),
     OnboardingContent(
       title: 'onboarding_title_2',
       description: 'onboarding_desc_2',
-      icon: Icons.favorite_outline,
-      color: const Color(0xFFFF6B9D),
+      svgPath: 'assets/images/onboarding/smiley-face_2.svg',
+      backgroundColor: const Color(0xFFFFEBEE),
+      accentColor: const Color(0xFFE91E63),
     ),
     OnboardingContent(
       title: 'onboarding_title_3',
       description: 'onboarding_desc_3',
-      icon: Icons.nights_stay_outlined,
-      color: const Color(0xFF66D9EF),
+      svgPath: 'assets/images/onboarding/dreamer_3.svg',
+      backgroundColor: const Color(0xFFE3F2FD),
+      accentColor: const Color(0xFF2196F3),
     ),
     OnboardingContent(
       title: 'onboarding_title_4',
       description: 'onboarding_desc_4',
-      icon: Icons.notifications_outlined,
-      color: const Color(0xFFFECA57),
+      svgPath: 'assets/images/onboarding/new-message_4.svg',
+      backgroundColor: const Color(0xFFFFF3E0),
+      accentColor: const Color(0xFFFF9800),
     ),
     OnboardingContent(
       title: 'onboarding_title_5',
       description: 'onboarding_desc_5',
-      icon: Icons.science_outlined,
-      color: const Color(0xFF48DBB4),
+      svgPath: 'assets/images/onboarding/medical-research_5.svg',
+      backgroundColor: const Color(0xFFF3E5F5),
+      accentColor: const Color(0xFF9C27B0),
     ),
   ];
 
@@ -184,11 +190,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> with TickerProvider
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: isPrimary ? const Color(0xFF6B73FF) : Colors.white,
-          foregroundColor: isPrimary ? Colors.white : const Color(0xFF6B73FF),
+          backgroundColor: isPrimary ? AppColors.primary : Colors.white,
+          foregroundColor: isPrimary ? Colors.white : AppColors.primary,
           elevation: isPrimary ? 2 : 0,
           side: isPrimary ? null : const BorderSide(
-            color: Color(0xFF6B73FF),
+            color: AppColors.primary,
             width: 2,
           ),
           shape: RoundedRectangleBorder(
@@ -221,18 +227,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> with TickerProvider
         child: Column(
           children: [
             Container(
+              height: 56,
               alignment: Alignment.centerRight,
-              padding: const EdgeInsets.all(16),
-              child: TextButton(
-                onPressed: _currentPage < _contents.length - 1 ? _skipToEnd : null,
-                child: Text(
-                  _currentPage < _contents.length - 1 ? 'onboarding_skip'.tr() : '',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 16,
-                  ),
-                ),
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              child: _currentPage < _contents.length - 1
+                  ? TextButton(
+                      onPressed: _skipToEnd,
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: Text(
+                        'onboarding_skip'.tr(),
+                        style: TextStyle(
+                          color: Colors.grey[700],
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
             Expanded(
               child: PageView.builder(
@@ -248,45 +264,62 @@ class _OnboardingScreenState extends State<OnboardingScreen> with TickerProvider
                         opacity: _fadeAnimations[index],
                         child: Transform.translate(
                           offset: Offset(0, _slideAnimations[index].value),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 32),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 120,
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                    color: content.color.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(30),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  content.backgroundColor,
+                                  Colors.white,
+                                ],
+                                stops: const [0.0, 0.6],
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24),
+                              child: Column(
+                                children: [
+                                  const Spacer(flex: 1),
+                                  // SVG 이미지
+                                  Container(
+                                    height: 280,
+                                    padding: const EdgeInsets.all(20),
+                                    child: SvgPicture.asset(
+                                      content.svgPath,
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
-                                  child: Icon(
-                                    content.icon,
-                                    size: 60,
-                                    color: content.color,
+                                  const SizedBox(height: 40),
+                                  // 제목
+                                  Text(
+                                    content.title.tr(),
+                                    style: TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                      color: content.accentColor,
+                                      letterSpacing: -0.5,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                ),
-                                const SizedBox(height: 48),
-                                Text(
-                                  content.title.tr(),
-                                  style: const TextStyle(
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF2D3436),
+                                  const SizedBox(height: 20),
+                                  // 설명
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    child: Text(
+                                      content.description.tr(),
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        color: Colors.grey[700],
+                                        height: 1.6,
+                                        letterSpacing: -0.2,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  content.description.tr(),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey[600],
-                                    height: 1.5,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
+                                  const Spacer(flex: 2),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -305,7 +338,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with TickerProvider
                 controller: _pageController,
                 count: _contents.length,
                 effect: ExpandingDotsEffect(
-                  activeDotColor: const Color(0xFF6B73FF),
+                  activeDotColor: AppColors.primary,
                   dotColor: Colors.grey[300]!,
                   dotHeight: 8,
                   dotWidth: 8,
@@ -324,13 +357,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> with TickerProvider
 class OnboardingContent {
   final String title;
   final String description;
-  final IconData icon;
-  final Color color;
+  final String svgPath;
+  final Color backgroundColor;
+  final Color accentColor;
 
   OnboardingContent({
     required this.title,
     required this.description,
-    required this.icon,
-    required this.color,
+    required this.svgPath,
+    required this.backgroundColor,
+    required this.accentColor,
   });
 }

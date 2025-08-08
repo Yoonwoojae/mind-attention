@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
+import 'package:mind_attention/core/utils/translation_utils.dart';
 
 class UserCustomizationScreen extends StatefulWidget {
   const UserCustomizationScreen({super.key});
@@ -49,17 +50,17 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                 children: [
                   Expanded(
                     child: Container(
-                      color: _selectedGoal != null ? const Color(0xFF6B73FF) : Colors.grey[200],
+                      color: _selectedGoal != null ? AppColors.primary : Colors.grey[200],
                     ),
                   ),
                   Expanded(
                     child: Container(
-                      color: _selectedLevel != null ? const Color(0xFF6B73FF) : Colors.grey[200],
+                      color: _selectedLevel != null ? AppColors.primary : Colors.grey[200],
                     ),
                   ),
                   Expanded(
                     child: Container(
-                      color: _selectedDuration != null ? const Color(0xFF6B73FF) : Colors.grey[200],
+                      color: _selectedDuration != null ? AppColors.primary : Colors.grey[200],
                     ),
                   ),
                 ],
@@ -74,7 +75,7 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                     children: [
                       const SizedBox(height: 20),
                       Text(
-                        'customization_title'.tr(),
+                        tr('customization_title'),
                         style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -82,7 +83,7 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'customization_subtitle'.tr(),
+                        tr('customization_subtitle'),
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.grey[600],
@@ -91,7 +92,7 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                       const SizedBox(height: 32),
                       // 목표 선택
                       Text(
-                        'customization_goal_title'.tr(),
+                        tr('customization_goal_title'),
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -120,12 +121,12 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                             child: Container(
                               decoration: BoxDecoration(
                                 color: isSelected
-                                    ? const Color(0xFF6B73FF).withOpacity(0.1)
+                                    ? AppColors.primary.withOpacity(0.1)
                                     : Colors.grey[50],
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
                                   color: isSelected
-                                      ? const Color(0xFF6B73FF)
+                                      ? AppColors.primary
                                       : Colors.grey[200]!,
                                   width: 2,
                                 ),
@@ -137,17 +138,17 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                                     goal['icon'],
                                     size: 32,
                                     color: isSelected
-                                        ? const Color(0xFF6B73FF)
+                                        ? AppColors.primary
                                         : Colors.grey[600],
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    goal['title'].tr(),
+                                    tr(goal['title']),
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                                       color: isSelected
-                                          ? const Color(0xFF6B73FF)
+                                          ? AppColors.primary
                                           : Colors.grey[700],
                                     ),
                                   ),
@@ -160,7 +161,7 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                       const SizedBox(height: 32),
                       // 경험 수준
                       Text(
-                        'customization_level_title'.tr(),
+                        tr('customization_level_title'),
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -181,12 +182,12 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? const Color(0xFF6B73FF).withOpacity(0.1)
+                                  ? AppColors.primary.withOpacity(0.1)
                                   : Colors.grey[50],
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
                                 color: isSelected
-                                    ? const Color(0xFF6B73FF)
+                                    ? AppColors.primary
                                     : Colors.grey[200]!,
                                 width: 2,
                               ),
@@ -200,7 +201,7 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                                     shape: BoxShape.circle,
                                     border: Border.all(
                                       color: isSelected
-                                          ? const Color(0xFF6B73FF)
+                                          ? AppColors.primary
                                           : Colors.grey[400]!,
                                       width: 2,
                                     ),
@@ -209,7 +210,7 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                                       ? Container(
                                           margin: const EdgeInsets.all(4),
                                           decoration: const BoxDecoration(
-                                            color: Color(0xFF6B73FF),
+                                            color: AppColors.primary,
                                             shape: BoxShape.circle,
                                           ),
                                         )
@@ -221,18 +222,18 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        level['title'].tr(),
+                                        tr(level['title']),
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                                           color: isSelected
-                                              ? const Color(0xFF6B73FF)
+                                              ? AppColors.primary
                                               : Colors.black87,
                                         ),
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        level['subtitle'].tr(),
+                                        tr(level['subtitle']),
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.grey[600],
@@ -249,7 +250,7 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                       const SizedBox(height: 32),
                       // 선호 스타일
                       Text(
-                        'customization_duration_title'.tr(),
+                        tr('customization_duration_title'),
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -275,12 +276,12 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
                                   color: isSelected
-                                      ? const Color(0xFF6B73FF).withOpacity(0.1)
+                                      ? AppColors.primary.withOpacity(0.1)
                                       : Colors.grey[50],
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(
                                     color: isSelected
-                                        ? const Color(0xFF6B73FF)
+                                        ? AppColors.primary
                                         : Colors.grey[200]!,
                                     width: 2,
                                   ),
@@ -293,23 +294,23 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                                           : Icons.hourglass_full,
                                       size: 32,
                                       color: isSelected
-                                          ? const Color(0xFF6B73FF)
+                                          ? AppColors.primary
                                           : Colors.grey[600],
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
-                                      duration['title'].tr(),
+                                      tr(duration['title']),
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                                         color: isSelected
-                                            ? const Color(0xFF6B73FF)
+                                            ? AppColors.primary
                                             : Colors.black87,
                                       ),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      duration['subtitle'].tr(),
+                                      tr(duration['subtitle']),
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey[600],
@@ -342,7 +343,7 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF6B73FF),
+                    backgroundColor: AppColors.primary,
                     disabledBackgroundColor: Colors.grey[300],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -350,7 +351,7 @@ class _UserCustomizationScreenState extends State<UserCustomizationScreen> {
                     elevation: 0,
                   ),
                   child: Text(
-                    'continue'.tr(),
+                    tr('continue'),
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

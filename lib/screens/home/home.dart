@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:go_router/go_router.dart';
 import 'package:mind_attention/core/utils/logger.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -61,7 +62,7 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF6B73FF), Color(0xFF000DFF)],
+          colors: [AppColors.primary, AppColors.primaryDark],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -122,12 +123,12 @@ class HomeScreen extends StatelessWidget {
                 width: 60,
                 height: 60,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6B73FF).withOpacity(0.1),
+                  color: AppColors.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: const Icon(
                   Icons.psychology,
-                  color: Color(0xFF6B73FF),
+                  color: AppColors.primary,
                   size: 30,
                 ),
               ),
@@ -159,7 +160,7 @@ class HomeScreen extends StatelessWidget {
                   AppLogger.i('Start session tapped');
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6B73FF),
+                  backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -201,7 +202,7 @@ class HomeScreen extends StatelessWidget {
                     '3/7',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xFF6B73FF),
+                      color: AppColors.primary,
                     ),
                   ),
                 ],
@@ -210,7 +211,7 @@ class HomeScreen extends StatelessWidget {
               LinearProgressIndicator(
                 value: 3 / 7,
                 backgroundColor: Colors.grey[200],
-                valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF6B73FF)),
+                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
                 minHeight: 8,
               ),
             ],
@@ -331,14 +332,14 @@ class HomeScreen extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: isSelected ? const Color(0xFF6B73FF) : Colors.grey,
+              color: isSelected ? AppColors.primary : Colors.grey,
             ),
             const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
                 fontSize: 12,
-                color: isSelected ? const Color(0xFF6B73FF) : Colors.grey,
+                color: isSelected ? AppColors.primary : Colors.grey,
               ),
             ),
           ],

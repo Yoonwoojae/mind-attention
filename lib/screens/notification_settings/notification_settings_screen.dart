@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
 
 class NotificationSettingsScreen extends StatefulWidget {
   const NotificationSettingsScreen({super.key});
@@ -198,7 +199,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                         context.go('/app-benefits');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF6B73FF),
+                        backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),

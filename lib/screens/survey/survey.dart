@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mind_attention/core/utils/logger.dart';
 import 'package:mind_attention/widgets/common/bottom_fixed_button.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
 
 class SurveyScreen extends StatefulWidget {
   const SurveyScreen({super.key});
@@ -65,7 +66,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const CircularProgressIndicator(
-              color: Color(0xFF6B73FF),
+              color: AppColors.primary,
             ),
             const SizedBox(height: 24),
             Text(
@@ -118,7 +119,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
             child: LinearProgressIndicator(
               value: (_currentPage + 1) / 3,
               backgroundColor: Colors.grey[200],
-              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF6B73FF)),
+              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
               minHeight: 4,
             ),
           ),
@@ -337,10 +338,10 @@ class _SurveyScreenState extends State<SurveyScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF6B73FF).withOpacity(0.1) : Colors.grey[50],
+          color: isSelected ? AppColors.primary.withOpacity(0.1) : Colors.grey[50],
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? const Color(0xFF6B73FF) : Colors.grey[200]!,
+            color: isSelected ? AppColors.primary : Colors.grey[200]!,
             width: 2,
           ),
         ),
@@ -350,7 +351,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF6B73FF) : Colors.grey[300],
+                color: isSelected ? AppColors.primary : Colors.grey[300],
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -366,14 +367,14 @@ class _SurveyScreenState extends State<SurveyScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  color: isSelected ? const Color(0xFF6B73FF) : Colors.black87,
+                  color: isSelected ? AppColors.primary : Colors.black87,
                 ),
               ),
             ),
             if (isSelected)
               const Icon(
                 Icons.check_circle,
-                color: Color(0xFF6B73FF),
+                color: AppColors.primary,
               ),
           ],
         ),

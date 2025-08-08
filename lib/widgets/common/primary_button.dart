@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
@@ -21,7 +22,7 @@ class PrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF6B73FF),
+          backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           disabledBackgroundColor: Colors.grey[300],
           elevation: 0,

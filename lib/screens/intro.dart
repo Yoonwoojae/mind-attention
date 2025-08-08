@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:go_router/go_router.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:mind_attention/core/utils/logger.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -102,8 +103,8 @@ class _IntroScreenState extends State<IntroScreen> with SingleTickerProviderStat
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF6B73FF),
-              Color(0xFF000DFF),
+              AppColors.primary,
+              AppColors.primaryDark,
             ],
           ),
         ),
@@ -136,7 +137,7 @@ class _IntroScreenState extends State<IntroScreen> with SingleTickerProviderStat
                           child: const Icon(
                             Icons.psychology_outlined,
                             size: 70,
-                            color: Color(0xFF6B73FF),
+                            color: AppColors.primary,
                           ),
                         ),
                       ),

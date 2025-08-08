@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:go_router/go_router.dart';
 import 'package:mind_attention/core/utils/logger.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -83,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                       'signup_title'.tr(),
                       style: const TextStyle(
-                        color: Color(0xFF6B73FF),
+                        color: AppColors.primary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

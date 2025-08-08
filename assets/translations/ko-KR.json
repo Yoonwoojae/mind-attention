@@ -124,6 +124,8 @@
   "trial_notification_info": "언제든지 설정에서 구독을 취소할 수 있어요",
   "understand": "알겠습니다",
   "subscription_free_trial": "7일 무료 체험",
+  "subscription_free_message": "7일 무료로 이용 가능합니다",
+  "subscription_cancel_anytime": "언제든 해지 가능합니다",
   "subscription_title": "프리미엄으로 업그레이드",
   "subscription_subtitle": "모든 기능을 제한 없이 이용하세요",
   "subscription_yearly_title": "연간 구독",

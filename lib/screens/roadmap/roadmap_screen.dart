@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
+import 'package:mind_attention/core/utils/translation_utils.dart';
 
 class RoadmapScreen extends StatefulWidget {
   const RoadmapScreen({super.key});
@@ -81,7 +82,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> with SingleTickerProvider
                 children: [
                   const SizedBox(height: 20),
                   Text(
-                    'roadmap_title'.tr(),
+                    tr('roadmap_title'),
                     style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -90,7 +91,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> with SingleTickerProvider
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'roadmap_subtitle'.tr(),
+                    tr('roadmap_subtitle'),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
@@ -122,7 +123,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> with SingleTickerProvider
                               height: 48,
                               decoration: BoxDecoration(
                                 color: item['isCurrent']
-                                    ? const Color(0xFF6B73FF)
+                                    ? AppColors.primary
                                     : item['isCompleted']
                                         ? Colors.green
                                         : Colors.grey[300],
@@ -130,7 +131,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> with SingleTickerProvider
                                 boxShadow: item['isCurrent']
                                     ? [
                                         BoxShadow(
-                                          color: const Color(0xFF6B73FF).withOpacity(0.3),
+                                          color: AppColors.primary.withOpacity(0.3),
                                           blurRadius: 12,
                                           offset: const Offset(0, 4),
                                         ),
@@ -170,12 +171,12 @@ class _RoadmapScreenState extends State<RoadmapScreen> with SingleTickerProvider
                             padding: const EdgeInsets.all(20),
                             decoration: BoxDecoration(
                               color: item['isCurrent']
-                                  ? const Color(0xFF6B73FF).withOpacity(0.05)
+                                  ? AppColors.primary.withOpacity(0.05)
                                   : Colors.grey[50],
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
                                 color: item['isCurrent']
-                                    ? const Color(0xFF6B73FF).withOpacity(0.3)
+                                    ? AppColors.primary.withOpacity(0.3)
                                     : Colors.grey[200]!,
                                 width: item['isCurrent'] ? 2 : 1,
                               ),
@@ -186,12 +187,12 @@ class _RoadmapScreenState extends State<RoadmapScreen> with SingleTickerProvider
                                 Row(
                                   children: [
                                     Text(
-                                      'roadmap_week'.tr(args: ['${item['week']}']),
+                                      tr('roadmap_week', args: {'0': '${item['week']}'}),
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
                                         color: item['isCurrent']
-                                            ? const Color(0xFF6B73FF)
+                                            ? AppColors.primary
                                             : Colors.grey[600],
                                       ),
                                     ),
@@ -203,11 +204,11 @@ class _RoadmapScreenState extends State<RoadmapScreen> with SingleTickerProvider
                                           vertical: 4,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: const Color(0xFF6B73FF),
+                                          color: AppColors.primary,
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                         child: Text(
-                                          'roadmap_current'.tr(),
+                                          tr('roadmap_current'),
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 12,
@@ -220,7 +221,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> with SingleTickerProvider
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  item['title'].tr(),
+                                  tr(item['title']),
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -229,7 +230,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> with SingleTickerProvider
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  item['description'].tr(),
+                                  tr(item['description']),
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey[600],
@@ -266,7 +267,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> with SingleTickerProvider
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            'roadmap_info'.tr(),
+                            tr('roadmap_info'),
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.blue[700],
@@ -285,14 +286,14 @@ class _RoadmapScreenState extends State<RoadmapScreen> with SingleTickerProvider
                         context.go('/first-lesson');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF6B73FF),
+                        backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
                         elevation: 0,
                       ),
                       child: Text(
-                        'roadmap_start_journey'.tr(),
+                        tr('roadmap_start_journey'),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
 
 class AnalysisScreen extends StatefulWidget {
   const AnalysisScreen({super.key});
@@ -85,8 +86,8 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              const Color(0xFF6B73FF),
-                              const Color(0xFF000DFF),
+                              AppColors.primary,
+                              AppColors.primaryDark,
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -130,7 +131,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> with SingleTickerProvid
                   child: LinearProgressIndicator(
                     backgroundColor: Colors.grey[200],
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      const Color(0xFF6B73FF),
+                      AppColors.primary,
                     ),
                   ),
                 ),

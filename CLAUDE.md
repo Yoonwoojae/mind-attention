@@ -8,12 +8,13 @@
   - `ko-KR.json` (한국어)
   - `en-US.json` (영어)
 - **번역 키 규칙: 플랫(flat) 구조 사용 - 중첩 금지!**
+- lib/core/utils/translation_utils.dart 파일사용.
   ```dart
   // ❌ 잘못된 예시
   Text('로그인')
   
   // ✅ 올바른 예시
-  Text('login_title').tr()
+  Text(tr('login_title'))
   ```
   ```json
   // ❌ 잘못된 번역 파일 (중첩 구조)

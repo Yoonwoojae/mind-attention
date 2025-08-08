@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mind_attention/core/utils/logger.dart';
 import 'package:mind_attention/widgets/common/primary_button.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -108,7 +109,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: Text(
                       'login_title'.tr(),
                       style: const TextStyle(
-                        color: Color(0xFF6B73FF),
+                        color: AppColors.primary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

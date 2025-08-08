@@ -7,7 +7,9 @@
       "Bash(del:*)",
       "Bash(mkdir:*)",
       "Bash(mv:*)",
-      "Bash(flutter clean:*)"
+      "Bash(flutter clean:*)",
+      "Bash(flutter analyze:*)",
+      "Bash(flutter pub:*)"
     ],
     "deny": []
   }

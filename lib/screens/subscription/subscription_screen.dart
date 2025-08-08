@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mind_attention/core/constants/app_colors.dart';
+import 'package:mind_attention/core/utils/translation_utils.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
@@ -11,26 +12,26 @@ class SubscriptionScreen extends StatefulWidget {
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
   String _selectedPlan = 'yearly';
-  final PageController _reviewController = PageController();
+  final PageController _reviewController = PageController(viewportFraction: 0.85);
 
   final List<Map<String, String>> _reviews = [
     {
       'name': 'review_name_1',
-      'rating': '5',
+      'age': '28',
       'text': 'review_text_1',
-      'date': 'review_date_1',
+      'avatar': '👩',
     },
     {
       'name': 'review_name_2',
-      'rating': '5',
+      'age': '35',
       'text': 'review_text_2',
-      'date': 'review_date_2',
+      'avatar': '👨',
     },
     {
       'name': 'review_name_3',
-      'rating': '5',
+      'age': '42',
       'text': 'review_text_3',
-      'date': 'review_date_3',
+      'avatar': '🧑',
     },
   ];
 
@@ -51,69 +52,52 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    // 헤더
+                    // 헤더 (크기 축소)
                     Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            const Color(0xFF6B73FF).withOpacity(0.1),
-                            const Color(0xFF000DFF).withOpacity(0.05),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                       child: Column(
                         children: [
                           // 7일 무료 배지
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
                                 colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
                               ),
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(0xFFFFD700).withOpacity(0.3),
-                                  blurRadius: 15,
-                                  offset: const Offset(0, 5),
-                                ),
-                              ],
+                              borderRadius: BorderRadius.circular(20),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.celebration, color: Colors.white, size: 20),
-                                const SizedBox(width: 8),
+                                const Icon(Icons.star, color: Colors.white, size: 18),
+                                const SizedBox(width: 6),
                                 Text(
-                                  'subscription_free_trial'.tr(),
+                                  tr('subscription_free_trial'),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 12),
                           Text(
-                            'subscription_title'.tr(),
+                            tr('subscription_free_message'),
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
                               color: Colors.black87,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 4),
                           Text(
-                            'subscription_subtitle'.tr(),
+                            tr('subscription_cancel_anytime'),
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               color: Colors.grey[600],
                             ),
                           ),
@@ -122,7 +106,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     ),
                     // 구독 플랜
                     Padding(
-                      padding: const EdgeInsets.all(24),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       child: Column(
                         children: [
                           // 연간 플랜
@@ -133,15 +117,15 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               });
                             },
                             child: Container(
-                              padding: const EdgeInsets.all(20),
+                              padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
                                 color: _selectedPlan == 'yearly'
-                                    ? const Color(0xFF6B73FF).withOpacity(0.1)
+                                    ? AppColors.primary.withOpacity(0.1)
                                     : Colors.white,
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
                                   color: _selectedPlan == 'yearly'
-                                      ? const Color(0xFF6B73FF)
+                                      ? AppColors.primary
                                       : Colors.grey[300]!,
                                   width: 2,
                                 ),
@@ -157,7 +141,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                           shape: BoxShape.circle,
                                           border: Border.all(
                                             color: _selectedPlan == 'yearly'
-                                                ? const Color(0xFF6B73FF)
+                                                ? AppColors.primary
                                                 : Colors.grey[400]!,
                                             width: 2,
                                           ),
@@ -166,7 +150,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                             ? Container(
                                                 margin: const EdgeInsets.all(4),
                                                 decoration: const BoxDecoration(
-                                                  color: Color(0xFF6B73FF),
+                                                  color: AppColors.primary,
                                                   shape: BoxShape.circle,
                                                 ),
                                               )
@@ -180,7 +164,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                             Row(
                                               children: [
                                                 Text(
-                                                  'subscription_yearly_title'.tr(),
+                                                  tr('subscription_yearly_title'),
                                                   style: const TextStyle(
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.bold,
@@ -197,7 +181,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                                     borderRadius: BorderRadius.circular(8),
                                                   ),
                                                   child: Text(
-                                                    'subscription_save_badge'.tr(),
+                                                    tr('subscription_save_badge'),
                                                     style: const TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 12,
@@ -209,7 +193,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
-                                              'subscription_yearly_price'.tr(),
+                                              tr('subscription_yearly_price'),
                                               style: TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.grey[600],
@@ -220,37 +204,36 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                       ),
                                     ],
                                   ),
-                                  if (_selectedPlan == 'yearly') ...[
-                                    const SizedBox(height: 12),
-                                    Container(
-                                      padding: const EdgeInsets.all(12),
-                                      decoration: BoxDecoration(
-                                        color: Colors.green[50],
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Icon(Icons.check_circle, color: Colors.green[700], size: 20),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              'subscription_yearly_benefit'.tr(),
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                color: Colors.green[700],
-                                                fontWeight: FontWeight.w600,
-                                              ),
+                                  // 2개월 무료 혜택 항상 표시
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.green[50],
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.check_circle, color: Colors.green[700], size: 18),
+                                        const SizedBox(width: 6),
+                                        Expanded(
+                                          child: Text(
+                                            tr('subscription_yearly_benefit'),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.green[700],
+                                              fontWeight: FontWeight.w600,
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ],
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 12),
                           // 월간 플랜
                           GestureDetector(
                             onTap: () {
@@ -259,15 +242,15 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               });
                             },
                             child: Container(
-                              padding: const EdgeInsets.all(20),
+                              padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
                                 color: _selectedPlan == 'monthly'
-                                    ? const Color(0xFF6B73FF).withOpacity(0.1)
+                                    ? AppColors.primary.withOpacity(0.1)
                                     : Colors.white,
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
                                   color: _selectedPlan == 'monthly'
-                                      ? const Color(0xFF6B73FF)
+                                      ? AppColors.primary
                                       : Colors.grey[300]!,
                                   width: 2,
                                 ),
@@ -281,7 +264,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                       shape: BoxShape.circle,
                                       border: Border.all(
                                         color: _selectedPlan == 'monthly'
-                                            ? const Color(0xFF6B73FF)
+                                            ? AppColors.primary
                                             : Colors.grey[400]!,
                                         width: 2,
                                       ),
@@ -290,7 +273,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                         ? Container(
                                             margin: const EdgeInsets.all(4),
                                             decoration: const BoxDecoration(
-                                              color: Color(0xFF6B73FF),
+                                              color: AppColors.primary,
                                               shape: BoxShape.circle,
                                             ),
                                           )
@@ -302,7 +285,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'subscription_monthly_title'.tr(),
+                                          tr('subscription_monthly_title'),
                                           style: const TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
@@ -310,7 +293,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                         ),
                                         const SizedBox(height: 4),
                                         Text(
-                                          'subscription_monthly_price'.tr(),
+                                          tr('subscription_monthly_price'),
                                           style: TextStyle(
                                             fontSize: 14,
                                             color: Colors.grey[600],
@@ -327,84 +310,107 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       ),
                     ),
                     // 사용자 리뷰
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'subscription_reviews_title'.tr(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Text(
+                            tr('subscription_reviews_title'),
                             style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          SizedBox(
-                            height: 140,
-                            child: PageView.builder(
-                              controller: _reviewController,
-                              itemCount: _reviews.length,
-                              itemBuilder: (context, index) {
-                                final review = _reviews[index];
-                                return Container(
-                                  margin: const EdgeInsets.only(right: 12),
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[50],
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(color: Colors.grey[200]!),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            review['name']!.tr(),
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                        ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          height: 140,
+                          child: PageView.builder(
+                            controller: _reviewController,
+                            itemCount: _reviews.length,
+                            padEnds: false,
+                            pageSnapping: true,
+                            itemBuilder: (context, index) {
+                              final review = _reviews[index];
+                              return Container(
+                                margin: EdgeInsets.only(left: index == 0 ? 24 : 8, right: 8),
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.grey[200]!),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 40,
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[100],
+                                            shape: BoxShape.circle,
                                           ),
-                                          const Spacer(),
-                                          ...List.generate(
-                                            int.parse(review['rating']!),
-                                            (index) => const Icon(
-                                              Icons.star,
-                                              size: 16,
-                                              color: Colors.amber,
+                                          child: Center(
+                                            child: Text(
+                                              review['avatar']!,
+                                              style: const TextStyle(fontSize: 20),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Expanded(
-                                        child: Text(
-                                          review['text']!.tr(),
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey[700],
-                                            height: 1.4,
                                           ),
                                         ),
-                                      ),
-                                      Text(
-                                        review['date']!.tr(),
+                                        const SizedBox(width: 10),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              tr(review['name']!),
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${review['age']}세',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey[600],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Expanded(
+                                      child: Text(
+                                        tr(review['text']!),
                                         style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey[500],
+                                          fontSize: 14,
+                                          color: Colors.grey[700],
+                                          height: 1.4,
                                         ),
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -425,7 +431,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               child: Column(
                 children: [
                   Text(
-                    'subscription_trial_info'.tr(),
+                    tr('subscription_trial_info'),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 12,
@@ -443,14 +449,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         context.go('/user-customization');
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF6B73FF),
+                        backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
                         elevation: 0,
                       ),
                       child: Text(
-                        'subscription_start_trial'.tr(),
+                        tr('subscription_start_trial'),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

@@ -114,7 +114,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6B73FF)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2D6A4F)),
         useMaterial3: true,
         fontFamily: 'Pretendard',
       ),
