@@ -48,6 +48,9 @@ dependencies:
   
   # 기타 유틸리티
   shared_preferences: ^2.2.3
+  
+  # 오디오 재생
+  audioplayers: ^6.0.0
   dio: ^5.5.0+1
   connectivity_plus: ^6.0.5
   easy_localization: ^3.0.7+1
@@ -82,3 +85,4 @@ flutter:
   assets:
     - assets/translations/
     - assets/images/onboarding/
+    - assets/sounds/

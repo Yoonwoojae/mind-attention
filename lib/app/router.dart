@@ -21,6 +21,13 @@ import 'package:mind_attention/screens/learn/lesson_template/exercise_template.d
 import 'package:mind_attention/screens/learn/lesson_template/reflection_template.dart';
 import 'package:mind_attention/screens/learn/lesson_template/feedback_template.dart';
 import 'package:mind_attention/screens/learn/topic_lessons_screen.dart';
+import 'package:mind_attention/screens/home/daily_focus_screen.dart';
+import 'package:mind_attention/screens/focus/focus_screen.dart';
+import 'package:mind_attention/screens/focus/timer/adhd_timer_screen.dart';
+import 'package:mind_attention/screens/focus/task_breakdown/task_breakdown_screen.dart';
+import 'package:mind_attention/screens/focus/reset/focus_reset_screen.dart';
+import 'package:mind_attention/screens/focus/environment/environment_setup_screen.dart';
+import 'package:mind_attention/screens/placeholder_screens.dart';
 import 'package:flutter/material.dart';
 
 final router = GoRouter(
@@ -45,6 +52,10 @@ final router = GoRouter(
     GoRoute(
       path: '/home',
       builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: '/daily-focus',
+      builder: (context, state) => const DailyFocusScreen(),
     ),
     GoRoute(
       path: '/survey',
@@ -176,45 +187,35 @@ final router = GoRouter(
       builder: (context, state) => const FocusScreen(),
     ),
     GoRoute(
+      path: '/focus/timer',
+      builder: (context, state) {
+        final uri = Uri.parse(state.uri.toString());
+        final duration = int.tryParse(uri.queryParameters['duration'] ?? '');
+        return ADHDTimerScreen(initialDuration: duration);
+      },
+    ),
+    GoRoute(
+      path: '/focus/task-breakdown',
+      builder: (context, state) => const TaskBreakdownScreen(),
+    ),
+    GoRoute(
+      path: '/focus/reset',
+      builder: (context, state) {
+        final uri = Uri.parse(state.uri.toString());
+        final mode = uri.queryParameters['mode'];
+        return FocusResetScreen(mode: mode);
+      },
+    ),
+    GoRoute(
+      path: '/focus/environment',
+      builder: (context, state) => const EnvironmentSetupScreen(),
+    ),
+    GoRoute(
       path: '/profile',
       builder: (context, state) => const ProfileScreen(),
     ),
   ],
 );
-
-// 임시 화면들 (나중에 별도 파일로 분리)
-class CompletedModulesScreen extends StatelessWidget {
-  const CompletedModulesScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Completed Modules'),
-      ),
-      body: const Center(
-        child: Text('완료된 모듈 목록 화면'),
-      ),
-    );
-  }
-}
-
-class TopicModulesScreen extends StatelessWidget {
-  final String topic;
-  const TopicModulesScreen({super.key, required this.topic});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(topic),
-      ),
-      body: Center(
-        child: Text('$topic 관련 모듈 목록'),
-      ),
-    );
-  }
-}
 
 class ModuleDetailScreen extends StatelessWidget {
   final String title;

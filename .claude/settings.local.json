@@ -9,7 +9,8 @@
       "Bash(mv:*)",
       "Bash(flutter clean:*)",
       "Bash(flutter analyze:*)",
-      "Bash(flutter pub:*)"
+      "Bash(flutter pub:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }
