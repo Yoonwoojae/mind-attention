@@ -446,7 +446,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       onPressed: () {
                         // 결제 프로세스 (구글 플레이 결제)
                         // 실제로는 결제 완료 후 이동
-                        context.go('/user-customization');
+                        // context.go('/user-customization');
+                        context.go('/roadmap');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,

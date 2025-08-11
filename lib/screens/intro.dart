@@ -65,14 +65,16 @@ class _IntroScreenState extends State<IntroScreen> with SingleTickerProviderStat
       if (!mounted) return;
       
       await Future.delayed(const Duration(milliseconds: 500));
+
+      context.go('/home');
       
-      if (user != null) {
-        AppLogger.i('User logged in: ${user.uid}');
-        context.go('/home');
-      } else {
-        AppLogger.i('No user logged in, showing onboarding');
-        context.go('/onboarding');
-      }
+      // if (user != null) {
+      //   AppLogger.i('User logged in: ${user.uid}');
+      //   context.go('/home');
+      // } else {
+      //   AppLogger.i('No user logged in, showing onboarding');
+      //   context.go('/onboarding');
+      // }
     } catch (e) {
       AppLogger.e('Error checking auth status: $e');
       if (mounted) {

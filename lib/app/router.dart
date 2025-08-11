@@ -14,6 +14,14 @@ import 'package:mind_attention/screens/subscription/subscription_screen.dart';
 import 'package:mind_attention/screens/user_customization/user_customization_screen.dart';
 import 'package:mind_attention/screens/roadmap/roadmap_screen.dart';
 import 'package:mind_attention/screens/first_lesson/first_lesson_screen.dart';
+import 'package:mind_attention/screens/learn/learn_screen.dart';
+import 'package:mind_attention/screens/learn/lesson_detail/lesson_detail_screen.dart';
+import 'package:mind_attention/screens/learn/lesson_template/lesson_template.dart';
+import 'package:mind_attention/screens/learn/lesson_template/exercise_template.dart';
+import 'package:mind_attention/screens/learn/lesson_template/reflection_template.dart';
+import 'package:mind_attention/screens/learn/lesson_template/feedback_template.dart';
+import 'package:mind_attention/screens/learn/topic_lessons_screen.dart';
+import 'package:flutter/material.dart';
 
 final router = GoRouter(
   initialLocation: '/',
@@ -78,5 +86,210 @@ final router = GoRouter(
       path: '/first-lesson',
       builder: (context, state) => const FirstLessonScreen(),
     ),
+    // Learn 관련 라우트들
+    GoRoute(
+      path: '/learn',
+      builder: (context, state) => const LearnScreen(),
+    ),
+    // Completed modules route removed - not implemented yet
+    GoRoute(
+      path: '/learn/topic',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        final topic = extra?['topic'] ?? '';
+        return TopicLessonsScreen(topic: topic);
+      },
+    ),
+    GoRoute(
+      path: '/lesson/detail',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return LessonDetailScreen(
+          moduleId: extra?['moduleId'] ?? '',
+          moduleTitle: extra?['moduleTitle'] ?? '',
+          moduleDescription: extra?['moduleDescription'] ?? '',
+          moduleImage: extra?['moduleImage'] ?? '',
+        );
+      },
+    ),
+    GoRoute(
+      path: '/lesson/template/:type',
+      builder: (context, state) {
+        final type = state.pathParameters['type'] ?? '';
+        final extra = state.extra as Map<String, dynamic>?;
+        
+        switch (type) {
+          case 'lesson':
+            return LessonTemplate(
+              moduleId: extra?['moduleId'] ?? '',
+              sessionId: extra?['sessionId'] ?? '',
+              lessonData: extra?['data'] ?? {},
+              onComplete: () => context.pop(),
+            );
+          case 'exercise':
+            return ExerciseTemplate(
+              moduleId: extra?['moduleId'] ?? '',
+              sessionId: extra?['sessionId'] ?? '',
+              exerciseData: extra?['data'] ?? {},
+              onComplete: () => context.pop(),
+            );
+          case 'reflection':
+            return ReflectionTemplate(
+              moduleId: extra?['moduleId'] ?? '',
+              sessionId: extra?['sessionId'] ?? '',
+              reflectionData: extra?['data'] ?? {},
+              onComplete: () => context.pop(),
+            );
+          case 'feedback':
+            return FeedbackTemplate(
+              moduleId: extra?['moduleId'] ?? '',
+              sessionId: extra?['sessionId'] ?? '',
+              feedbackData: extra?['data'] ?? {},
+              onComplete: () => context.pop(),
+            );
+          default:
+            return Scaffold(
+              appBar: AppBar(title: Text('Unknown Template')),
+              body: Center(child: Text('Unknown template type: $type')),
+            );
+        }
+      },
+    ),
+    GoRoute(
+      path: '/module/detail',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        final title = extra?['title'] ?? '';
+        return ModuleDetailScreen(title: title);
+      },
+    ),
+    GoRoute(
+      path: '/module/review',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        final title = extra?['title'] ?? '';
+        return ModuleReviewScreen(title: title);
+      },
+    ),
+    GoRoute(
+      path: '/focus',
+      builder: (context, state) => const FocusScreen(),
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => const ProfileScreen(),
+    ),
   ],
 );
+
+// 임시 화면들 (나중에 별도 파일로 분리)
+class CompletedModulesScreen extends StatelessWidget {
+  const CompletedModulesScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Completed Modules'),
+      ),
+      body: const Center(
+        child: Text('완료된 모듈 목록 화면'),
+      ),
+    );
+  }
+}
+
+class TopicModulesScreen extends StatelessWidget {
+  final String topic;
+  const TopicModulesScreen({super.key, required this.topic});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(topic),
+      ),
+      body: Center(
+        child: Text('$topic 관련 모듈 목록'),
+      ),
+    );
+  }
+}
+
+class ModuleDetailScreen extends StatelessWidget {
+  final String title;
+  const ModuleDetailScreen({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('모듈 상세: $title'),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('뒤로 가기'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ModuleReviewScreen extends StatelessWidget {
+  final String title;
+  const ModuleReviewScreen({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('$title 복습'),
+      ),
+      body: Center(
+        child: Text('$title 복습 모드'),
+      ),
+    );
+  }
+}
+
+class FocusScreen extends StatelessWidget {
+  const FocusScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Focus'),
+      ),
+      body: const Center(
+        child: Text('Focus 화면'),
+      ),
+    );
+  }
+}
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile'),
+      ),
+      body: const Center(
+        child: Text('Profile 화면'),
+      ),
+    );
+  }
+}

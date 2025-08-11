@@ -24,15 +24,10 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: Color(0xFF2D3436)),
-            onPressed: () {
-              AppLogger.i('Notifications tapped');
-            },
-          ),
-          IconButton(
             icon: const Icon(Icons.settings_outlined, color: Color(0xFF2D3436)),
             onPressed: () {
-              AppLogger.i('Settings tapped');
+              AppLogger.i('Settings tapped - navigating to profile');
+              context.push('/profile');
             },
           ),
         ],
@@ -309,10 +304,13 @@ class HomeScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(Icons.home, '홈', true),
-              _buildNavItem(Icons.explore, '탐색', false),
-              _buildNavItem(Icons.assessment, '통계', false),
-              _buildNavItem(Icons.person, '프로필', false),
+              _buildNavItem(Icons.home, 'nav_home'.tr(), true, () {}),
+              _buildNavItem(Icons.school, 'nav_learn'.tr(), false, () {
+                context.push('/learn');
+              }),
+              _buildNavItem(Icons.psychology, 'nav_focus'.tr(), false, () {
+                context.push('/focus');
+              }),
             ],
           ),
         ),
@@ -320,10 +318,11 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, bool isSelected) {
+  Widget _buildNavItem(IconData icon, String label, bool isSelected, VoidCallback onTap) {
     return InkWell(
       onTap: () {
         AppLogger.i('$label nav tapped');
+        onTap();
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

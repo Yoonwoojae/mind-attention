@@ -59,6 +59,8 @@ dependencies:
   animated_text_kit: ^4.2.3
   smooth_page_indicator: ^1.2.1
   flutter_svg: ^2.2.0
+  just_audio: ^0.10.4
+  audio_session: ^0.2.2
 
 dev_dependencies:
   flutter_test:

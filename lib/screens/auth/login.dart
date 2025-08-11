@@ -52,6 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
               _buildSocialLoginButton(
                 onPressed: () async {
                   // TODO: Google 로그인 구현
+                  context.go('/home');
                   AppLogger.i('Google login attempted');
                 },
                 icon: Icons.g_mobiledata,
@@ -59,17 +60,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 backgroundColor: Colors.white,
                 textColor: Colors.black87,
                 borderColor: Colors.grey[300]!,
-              ),
-              const SizedBox(height: 12),
-              _buildSocialLoginButton(
-                onPressed: () async {
-                  // TODO: Apple 로그인 구현
-                  AppLogger.i('Apple login attempted');
-                },
-                icon: Icons.apple,
-                text: 'login_apple'.tr(),
-                backgroundColor: Colors.black,
-                textColor: Colors.white,
               ),
               const SizedBox(height: 24),
               Row(

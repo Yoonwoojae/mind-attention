@@ -11,8 +11,6 @@ class PlanRecommendationScreen extends StatefulWidget {
 }
 
 class _PlanRecommendationScreenState extends State<PlanRecommendationScreen> {
-  String? _selectedPlan;
-
   final List<Map<String, dynamic>> _plans = [
     {
       'id': 'breathing',
@@ -39,7 +37,6 @@ class _PlanRecommendationScreenState extends State<PlanRecommendationScreen> {
       ],
       'color': const Color(0xFF00D9FF),
       'icon': Icons.center_focus_strong,
-      'recommended': true,
     },
     {
       'id': 'emotion',
@@ -96,27 +93,15 @@ class _PlanRecommendationScreenState extends State<PlanRecommendationScreen> {
                 itemCount: _plans.length,
                 itemBuilder: (context, index) {
                   final plan = _plans[index];
-                  final isRecommended = plan['recommended'] ?? false;
-                  final isSelected = _selectedPlan == plan['id'];
 
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedPlan = plan['id'];
-                      });
-                    },
-                    child: Container(
+                  return Container(
                       margin: const EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
-                        color: isSelected
-                            ? plan['color'].withOpacity(0.1)
-                            : Colors.white,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: isSelected
-                              ? plan['color']
-                              : Colors.grey[200]!,
-                          width: isSelected ? 2 : 1,
+                          color: Colors.grey[200]!,
+                          width: 1,
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -128,38 +113,6 @@ class _PlanRecommendationScreenState extends State<PlanRecommendationScreen> {
                       ),
                       child: Stack(
                         children: [
-                          // 추천 배지
-                          if (isRecommended)
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      const Color(0xFFFFD700),
-                                      const Color(0xFFFFA500),
-                                    ],
-                                  ),
-                                  borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(20),
-                                    bottomLeft: Radius.circular(20),
-                                  ),
-                                ),
-                                child: Text(
-                                  'plan_recommended'.tr(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ),
                           // 플랜 내용
                           Padding(
                             padding: const EdgeInsets.all(20),
@@ -245,7 +198,6 @@ class _PlanRecommendationScreenState extends State<PlanRecommendationScreen> {
                           ),
                         ],
                       ),
-                    ),
                   );
                 },
               ),
@@ -257,11 +209,9 @@ class _PlanRecommendationScreenState extends State<PlanRecommendationScreen> {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: _selectedPlan != null
-                      ? () {
-                          context.go('/notification-settings');
-                        }
-                      : null,
+                  onPressed: () {
+                    context.go('/notification-settings');
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     disabledBackgroundColor: Colors.grey[300],
