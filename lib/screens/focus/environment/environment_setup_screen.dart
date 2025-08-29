@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mind_attention/core/utils/translation_utils.dart';
 import 'package:mind_attention/core/utils/logger.dart';
+import 'package:mind_attention/widgets/help_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EnvironmentSetupScreen extends StatefulWidget {
@@ -267,6 +268,24 @@ class _EnvironmentSetupScreenState extends State<EnvironmentSetupScreen>
           style: const TextStyle(color: Colors.black87),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: Colors.black87),
+            onPressed: () {
+              HelpDialog.show(
+                context,
+                titleKey: 'help_environment_title',
+                purposeKey: 'help_environment_purpose',
+                benefitsKey: 'help_environment_benefits',
+                howToUseKey: 'help_environment_how_to_use',
+                tipKeys: [
+                  'help_environment_tip1',
+                  'help_environment_tip2',
+                  'help_environment_tip3',
+                ],
+                primaryColor: const Color(0xFF9C27B0),
+              );
+            },
+          ),
           Container(
             margin: const EdgeInsets.only(right: 16),
             child: TextButton.icon(

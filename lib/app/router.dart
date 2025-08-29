@@ -7,7 +7,7 @@ import 'package:mind_attention/screens/home/home.dart';
 import 'package:mind_attention/screens/survey/survey.dart';
 import 'package:mind_attention/screens/analysis/analysis_screen.dart';
 import 'package:mind_attention/screens/plan_recommendation/plan_recommendation_screen.dart';
-import 'package:mind_attention/screens/notification_settings/notification_settings_screen.dart';
+import 'package:mind_attention/screens/notification_settings/notification_settings_screen.dart' as old_notification;
 import 'package:mind_attention/screens/app_benefits/app_benefits_screen.dart';
 import 'package:mind_attention/screens/push_notification_guide/push_notification_guide_screen.dart';
 import 'package:mind_attention/screens/subscription/subscription_screen.dart';
@@ -27,8 +27,16 @@ import 'package:mind_attention/screens/focus/timer/adhd_timer_screen.dart';
 import 'package:mind_attention/screens/focus/task_breakdown/task_breakdown_screen.dart';
 import 'package:mind_attention/screens/focus/reset/focus_reset_screen.dart';
 import 'package:mind_attention/screens/focus/environment/environment_setup_screen.dart';
-import 'package:mind_attention/screens/placeholder_screens.dart';
 import 'package:flutter/material.dart';
+import 'package:mind_attention/screens/settings/settings_screen.dart';
+import 'package:mind_attention/screens/settings/profile_settings_screen.dart';
+import 'package:mind_attention/screens/settings/notification_settings_screen.dart' as new_notification;
+import 'package:mind_attention/screens/settings/language_settings_screen.dart';
+import 'package:mind_attention/screens/settings/announcements_screen.dart';
+import 'package:mind_attention/screens/settings/terms_screen.dart';
+import 'package:mind_attention/screens/settings/privacy_screen.dart';
+import 'package:mind_attention/screens/settings/contact_screen.dart';
+import 'package:mind_attention/screens/settings/version_screen.dart';
 
 final router = GoRouter(
   initialLocation: '/',
@@ -71,7 +79,7 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/notification-settings',
-      builder: (context, state) => const NotificationSettingsScreen(),
+      builder: (context, state) => const old_notification.NotificationSettingsScreen(),
     ),
     GoRoute(
       path: '/app-benefits',
@@ -211,8 +219,40 @@ final router = GoRouter(
       builder: (context, state) => const EnvironmentSetupScreen(),
     ),
     GoRoute(
-      path: '/profile',
-      builder: (context, state) => const ProfileScreen(),
+      path: '/settings',
+      builder: (context, state) => const SettingsScreen(),
+    ),
+    GoRoute(
+      path: '/settings/profile',
+      builder: (context, state) => const ProfileSettingsScreen(),
+    ),
+    GoRoute(
+      path: '/settings/notifications',
+      builder: (context, state) => const new_notification.NotificationSettingsScreen(),
+    ),
+    GoRoute(
+      path: '/settings/language',
+      builder: (context, state) => const LanguageSettingsScreen(),
+    ),
+    GoRoute(
+      path: '/settings/announcements',
+      builder: (context, state) => const AnnouncementsScreen(),
+    ),
+    GoRoute(
+      path: '/settings/terms',
+      builder: (context, state) => const TermsScreen(),
+    ),
+    GoRoute(
+      path: '/settings/privacy',
+      builder: (context, state) => const PrivacyScreen(),
+    ),
+    GoRoute(
+      path: '/settings/contact',
+      builder: (context, state) => const ContactScreen(),
+    ),
+    GoRoute(
+      path: '/settings/version',
+      builder: (context, state) => const VersionScreen(),
     ),
   ],
 );
@@ -279,18 +319,3 @@ class FocusScreen extends StatelessWidget {
   }
 }
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: const Center(
-        child: Text('Profile 화면'),
-      ),
-    );
-  }
-}

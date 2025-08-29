@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mind_attention/core/utils/translation_utils.dart';
 import 'package:mind_attention/core/utils/logger.dart';
+import 'package:mind_attention/widgets/help_dialog.dart';
 
 class TaskBreakdownScreen extends StatefulWidget {
   const TaskBreakdownScreen({super.key});
@@ -142,20 +143,52 @@ class _TaskBreakdownScreenState extends State<TaskBreakdownScreen>
   void _breakDownFurther() {
     if (_currentStep == null) return;
 
+    // 이미 너무 작은 작업은 더 이상 분할하지 않음
+    if (_currentStep!.minutes <= 3) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(tr('task_cannot_break_smaller')),
+          backgroundColor: Colors.orange,
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      );
+      return;
+    }
+
+    // 전체 스텝이 너무 많으면 제한
+    if (_steps.length >= 15) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(tr('task_too_many_steps')),
+          backgroundColor: Colors.orange,
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      );
+      return;
+    }
+
     HapticFeedback.lightImpact();
 
     final subSteps = [
       TaskStep(
         title: '${_currentStep!.title} - ${tr('task_substep_1')}',
-        minutes: (_currentStep!.minutes / 3).round(),
+        minutes: (_currentStep!.minutes / 3).round().clamp(1, 999),
       ),
       TaskStep(
         title: '${_currentStep!.title} - ${tr('task_substep_2')}',
-        minutes: (_currentStep!.minutes / 3).round(),
+        minutes: (_currentStep!.minutes / 3).round().clamp(1, 999),
       ),
       TaskStep(
         title: '${_currentStep!.title} - ${tr('task_substep_3')}',
-        minutes: (_currentStep!.minutes / 3).round(),
+        minutes: (_currentStep!.minutes / 3).round().clamp(1, 999),
       ),
     ];
 
@@ -164,6 +197,8 @@ class _TaskBreakdownScreenState extends State<TaskBreakdownScreen>
       _steps.insertAll(_currentStepIndex, subSteps);
       _currentStep = _steps[_currentStepIndex];
     });
+    
+    AppLogger.i('Task broken down further. Total steps: ${_steps.length}');
   }
 
   void _showCompletionDialog() {
@@ -246,6 +281,24 @@ class _TaskBreakdownScreenState extends State<TaskBreakdownScreen>
           style: const TextStyle(color: Colors.black87),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: Colors.black87),
+            onPressed: () {
+              HelpDialog.show(
+                context,
+                titleKey: 'help_task_breakdown_title',
+                purposeKey: 'help_task_breakdown_purpose',
+                benefitsKey: 'help_task_breakdown_benefits',
+                howToUseKey: 'help_task_breakdown_how_to_use',
+                tipKeys: [
+                  'help_task_breakdown_tip1',
+                  'help_task_breakdown_tip2',
+                  'help_task_breakdown_tip3',
+                ],
+                primaryColor: const Color(0xFF2196F3),
+              );
+            },
+          ),
           if (_steps.isNotEmpty)
             Container(
               margin: const EdgeInsets.only(right: 16),

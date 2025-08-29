@@ -103,26 +103,27 @@ class _DailyFocusScreenState extends State<DailyFocusScreen> {
       return _buildCompletedScreen();
     }
 
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF8F9FA),
-        appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF2D3436)),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Daily Focus',
-          style: TextStyle(
-            color: Color(0xFF2D3436),
-            fontWeight: FontWeight.bold,
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          backgroundColor: const Color(0xFFF8F9FA),
+          appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Color(0xFF2D3436)),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: const Text(
+            'Daily Focus',
+            style: TextStyle(
+              color: Color(0xFF2D3436),
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      body: Column(
+        body: Column(
         children: [
           // Progress Indicator
           Container(
@@ -193,6 +194,7 @@ class _DailyFocusScreenState extends State<DailyFocusScreen> {
         ],
       ),
       ),
+    ),
     );
   }
 
@@ -705,36 +707,37 @@ class _DailyFocusScreenState extends State<DailyFocusScreen> {
 
   // 이미 설정된 경우 표시되는 화면
   Widget _buildCompletedScreen() {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF2D3436)),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Daily Focus',
-          style: TextStyle(
-            color: Color(0xFF2D3436),
-            fontWeight: FontWeight.bold,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF8F9FA),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Color(0xFF2D3436)),
+            onPressed: () => Navigator.pop(context),
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: _resetFocus,
-            child: const Text(
-              'Edit',
-              style: TextStyle(
-                color: AppColors.primary,
-                fontWeight: FontWeight.w600,
-              ),
+          title: const Text(
+            'Daily Focus',
+            style: TextStyle(
+              color: Color(0xFF2D3436),
+              fontWeight: FontWeight.bold,
             ),
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
+          actions: [
+            TextButton(
+              onPressed: _resetFocus,
+              child: const Text(
+                'Edit',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -955,6 +958,7 @@ class _DailyFocusScreenState extends State<DailyFocusScreen> {
           ],
         ),
       ),
+    ),
     );
   }
 }

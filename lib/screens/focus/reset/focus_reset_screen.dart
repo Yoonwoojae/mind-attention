@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mind_attention/core/utils/translation_utils.dart';
 import 'package:mind_attention/core/utils/logger.dart';
+import 'package:mind_attention/widgets/help_dialog.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class FocusResetScreen extends StatefulWidget {
@@ -273,6 +274,26 @@ class _FocusResetScreenState extends State<FocusResetScreen>
           tr('focus_reset'),
           style: const TextStyle(color: Colors.black87),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: Colors.black87),
+            onPressed: () {
+              HelpDialog.show(
+                context,
+                titleKey: 'help_focus_reset_title',
+                purposeKey: 'help_focus_reset_purpose',
+                benefitsKey: 'help_focus_reset_benefits',
+                howToUseKey: 'help_focus_reset_how_to_use',
+                tipKeys: [
+                  'help_focus_reset_tip1',
+                  'help_focus_reset_tip2',
+                  'help_focus_reset_tip3',
+                ],
+                primaryColor: const Color(0xFFFF9800),
+              );
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: _showFeedback

@@ -86,8 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.settings_outlined, color: Color(0xFF2D3436)),
             onPressed: () {
-              AppLogger.i('Settings tapped - navigating to profile');
-              context.push('/profile');
+              AppLogger.i('Settings tapped - navigating to settings');
+              context.push('/settings');
             },
           ),
         ],

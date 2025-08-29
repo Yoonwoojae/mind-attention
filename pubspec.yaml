@@ -56,6 +56,11 @@ dependencies:
   easy_localization: ^3.0.7+1
 
   logger: ^2.0.2
+  
+  # Settings 페이지용 패키지
+  package_info_plus: ^8.0.0
+  url_launcher: ^6.3.0
+  permission_handler: ^11.3.1
 
   # 네비게이션
   go_router: ^10.0.0

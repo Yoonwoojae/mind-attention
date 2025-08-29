@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mind_attention/core/utils/translation_utils.dart';
 import 'package:mind_attention/core/utils/logger.dart';
+import 'package:mind_attention/widgets/help_dialog.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class ADHDTimerScreen extends StatefulWidget {
@@ -309,6 +310,24 @@ class _ADHDTimerScreenState extends State<ADHDTimerScreen>
           style: const TextStyle(color: Colors.black87),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: Colors.black87),
+            onPressed: () {
+              HelpDialog.show(
+                context,
+                titleKey: 'help_adhd_timer_title',
+                purposeKey: 'help_adhd_timer_purpose',
+                benefitsKey: 'help_adhd_timer_benefits',
+                howToUseKey: 'help_adhd_timer_how_to_use',
+                tipKeys: [
+                  'help_adhd_timer_tip1',
+                  'help_adhd_timer_tip2',
+                  'help_adhd_timer_tip3',
+                ],
+                primaryColor: const Color(0xFF4CAF50),
+              );
+            },
+          ),
           Container(
             margin: const EdgeInsets.only(right: 16),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

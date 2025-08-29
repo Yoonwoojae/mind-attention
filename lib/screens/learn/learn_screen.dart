@@ -11,9 +11,12 @@ class LearnScreen extends StatefulWidget {
   State<LearnScreen> createState() => _LearnScreenState();
 }
 
-class _LearnScreenState extends State<LearnScreen> {
+class _LearnScreenState extends State<LearnScreen> with AutomaticKeepAliveClientMixin {
   bool _isYourModules = true;
   bool _showAllCompleted = false;
+  
+  @override
+  bool get wantKeepAlive => true;
   
   // 임시 데이터 - 실제로는 서비스에서 관리
   final Map<String, dynamic> currentModule = {
@@ -59,6 +62,7 @@ class _LearnScreenState extends State<LearnScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
@@ -88,7 +92,6 @@ class _LearnScreenState extends State<LearnScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomNav(context),
     );
   }
 
@@ -116,15 +119,6 @@ class _LearnScreenState extends State<LearnScreen> {
                   decoration: BoxDecoration(
                     color: _isYourModules ? Colors.white : Colors.transparent,
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: _isYourModules
-                        ? [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ]
-                        : [],
                   ),
                   child: Center(
                     child: Text(
@@ -151,15 +145,6 @@ class _LearnScreenState extends State<LearnScreen> {
                   decoration: BoxDecoration(
                     color: !_isYourModules ? Colors.white : Colors.transparent,
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: !_isYourModules
-                        ? [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ]
-                        : [],
                   ),
                   child: Center(
                     child: Text(
@@ -194,22 +179,12 @@ class _LearnScreenState extends State<LearnScreen> {
   }
 
   Widget _buildCurrentModule() {
-    return Container(
+    return RepaintBoundary(
+      child: Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.primary.withOpacity(0.9), AppColors.primaryDark],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: AppColors.primary,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withOpacity(0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -288,11 +263,14 @@ class _LearnScreenState extends State<LearnScreen> {
                 ],
               ),
               const SizedBox(height: 8),
-              LinearProgressIndicator(
-                value: 0.38,
-                backgroundColor: Colors.white.withOpacity(0.2),
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                minHeight: 6,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(3),
+                child: const LinearProgressIndicator(
+                  value: 0.38,
+                  backgroundColor: Color(0x33FFFFFF),
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  minHeight: 6,
+                ),
               ),
             ],
           ),
@@ -321,6 +299,7 @@ class _LearnScreenState extends State<LearnScreen> {
             child: Text('learn_continue'.tr()),
           ),
         ],
+      ),
       ),
     );
   }
@@ -360,26 +339,28 @@ class _LearnScreenState extends State<LearnScreen> {
         if (_showAllCompleted)
           // 모든 완료된 모듈 표시 (세로 목록)
           Column(
-            children: completedModules.map((module) => 
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: _buildCompletedModuleListItem(module),
-              )
-            ).toList(),
+            children: [
+              for (final module in completedModules)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _buildCompletedModuleListItem(module),
+                ),
+            ],
           )
         else
           // 최근 3개만 가로 스크롤로 표시
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: completedModules.take(3).map((module) => 
-                Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: _buildCompletedModuleCard(
-                    module: module,
+              children: [
+                for (final module in completedModules.take(3))
+                  Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: _buildCompletedModuleCard(
+                      module: module,
+                    ),
                   ),
-                )
-              ).toList(),
+              ],
             ),
           ),
       ],
@@ -408,13 +389,10 @@ class _LearnScreenState extends State<LearnScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          border: Border.all(
+            color: Colors.grey.withOpacity(0.1),
+            width: 1,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -508,19 +486,8 @@ class _LearnScreenState extends State<LearnScreen> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [const Color(0xFF66D9EF).withOpacity(0.9), const Color(0xFF4AA3BA)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: const Color(0xFF66D9EF),
             borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF66D9EF).withOpacity(0.3),
-                blurRadius: 12,
-                offset: const Offset(0, 6),
-              ),
-            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -610,6 +577,7 @@ class _LearnScreenState extends State<LearnScreen> {
           childAspectRatio: 2.5,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
+          cacheExtent: 500,
           children: [
             _buildTopicCard('learn_topic_productivity'.tr(), Icons.trending_up, const Color(0xFFB8E6B8)),
             _buildTopicCard('learn_topic_wellbeing'.tr(), Icons.favorite, const Color(0xFFDDB8E6)),
@@ -894,38 +862,6 @@ class _LearnScreenState extends State<LearnScreen> {
     }
   }
 
-  Widget _buildBottomNav(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(Icons.home, 'nav_home'.tr(), false, () {
-                context.go('/home');
-              }),
-              _buildNavItem(Icons.school, 'nav_learn'.tr(), true, () {}),
-              _buildNavItem(Icons.psychology, 'nav_focus'.tr(), false, () {
-                context.push('/focus');
-              }),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   // \uc644\ub8cc\ub41c \ubaa8\ub4c8\uc744 \ub9ac\uc2a4\ud2b8 \ud615\ud0dc\ub85c \ud45c\uc2dc\ud558\ub294 \uc704\uc82f \ucd94\uac00
   Widget _buildCompletedModuleListItem(Map<String, dynamic> module) {
     return GestureDetector(
@@ -945,13 +881,10 @@ class _LearnScreenState extends State<LearnScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          border: Border.all(
+            color: Colors.grey.withOpacity(0.1),
+            width: 1,
+          ),
         ),
         child: Row(
           children: [
@@ -1036,34 +969,5 @@ class _LearnScreenState extends State<LearnScreen> {
       default:
         return Icons.self_improvement;
     }
-  }
-
-  Widget _buildNavItem(IconData icon, String label, bool isSelected, VoidCallback onTap) {
-    return InkWell(
-      onTap: () {
-        AppLogger.i('$label nav tapped');
-        onTap();
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: isSelected ? AppColors.primary : Colors.grey,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                color: isSelected ? AppColors.primary : Colors.grey,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
