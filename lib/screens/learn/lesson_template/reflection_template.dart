@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/utils/translation_utils.dart';
 import '../../../core/utils/logger.dart';
+import 'completion_screen.dart';
 
 class ReflectionTemplate extends StatefulWidget {
   final String moduleId;
@@ -25,6 +26,8 @@ class _ReflectionTemplateState extends State<ReflectionTemplate> {
   final Map<String, TextEditingController> _textControllers = {};
   bool _isSubmitting = false;
   bool _hasChanges = false;
+  int _currentQuestionIndex = 0;
+  bool _showCelebration = false;
 
   @override
   void initState() {
@@ -86,6 +89,48 @@ class _ReflectionTemplateState extends State<ReflectionTemplate> {
     return true;
   }
 
+  bool _canProceedToNext(Map<String, dynamic> question) {
+    if (question['required'] == true) {
+      final response = _responses[question['id']];
+      return response != null && (response is! String || response.isNotEmpty);
+    }
+    return true; // 필수가 아니면 언제든 진행 가능
+  }
+
+  void _goToNextQuestion() async {
+    final questions = widget.reflectionData['questions'] ?? [];
+    
+    // 성취감 애니메이션 표시
+    setState(() {
+      _showCelebration = true;
+    });
+
+    // 짧은 축하 애니메이션
+    await Future.delayed(const Duration(milliseconds: 800));
+    
+    setState(() {
+      _showCelebration = false;
+    });
+
+    // 마지막 질문이면 제출
+    if (_currentQuestionIndex >= questions.length - 1) {
+      await _submitReflection();
+    } else {
+      // 다음 질문으로 이동
+      setState(() {
+        _currentQuestionIndex++;
+      });
+    }
+  }
+
+  void _goToPreviousQuestion() {
+    if (_currentQuestionIndex > 0) {
+      setState(() {
+        _currentQuestionIndex--;
+      });
+    }
+  }
+
   Future<void> _submitReflection() async {
     if (!_isFormValid) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -107,7 +152,72 @@ class _ReflectionTemplateState extends State<ReflectionTemplate> {
     AppLogger.i('Reflection submitted: $_responses');
     
     if (mounted) {
-      widget.onComplete();
+      // 완료 타입 결정
+      final completionType = _determineCompletionType();
+      
+      // 완료 화면으로 이동
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => CompletionScreen(
+            type: completionType,
+            onContinue: () {
+              // 완료 화면에서 목록 화면으로 이동
+              Navigator.of(context).pop(); // 완료 화면 닫기
+              Navigator.of(context).pop(); // 리플렉션 화면 닫기
+              widget.onComplete(); // 원래 콜백 호출
+            },
+          ),
+        ),
+      );
+    }
+  }
+
+  CompletionType _determineCompletionType() {
+    final questions = widget.reflectionData['questions'] ?? [];
+    final totalQuestions = questions.length;
+    int answeredQuestions = 0;
+    int requiredAnswered = 0;
+    int totalRequired = 0;
+    bool hasNegativeResponses = false;
+    
+    // 응답 분석
+    for (var question in questions) {
+      final response = _responses[question['id']];
+      final isRequired = question['required'] ?? false;
+      
+      if (isRequired) {
+        totalRequired++;
+        if (response != null && (response is! String || response.isNotEmpty)) {
+          requiredAnswered++;
+        }
+      }
+      
+      if (response != null && (response is! String || response.isNotEmpty)) {
+        answeredQuestions++;
+        
+        // 부정적인 응답 체크 (스케일이 낮거나 부정적인 텍스트)
+        if (response is int && response <= 2) {
+          hasNegativeResponses = true;
+        } else if (response is String && 
+                   (response.contains('어려') || response.contains('힘들') || 
+                    response.contains('못하겠') || response.contains('안되'))) {
+          hasNegativeResponses = true;
+        }
+      }
+    }
+    
+    final completionRate = answeredQuestions / totalQuestions;
+    final requiredCompletionRate = totalRequired > 0 ? requiredAnswered / totalRequired : 1.0;
+    
+    // 완료 타입 결정 로직
+    if (requiredCompletionRate >= 1.0 && completionRate >= 0.9) {
+      return CompletionType.perfect; // 완벽해요
+    } else if (requiredCompletionRate >= 1.0 && completionRate >= 0.7) {
+      return CompletionType.great; // 잘했어요
+    } else if (hasNegativeResponses || completionRate < 0.5) {
+      return CompletionType.enough; // 이미 충분해요
+    } else {
+      return CompletionType.encourage; // 괜찮아요/수고했어요
     }
   }
 
@@ -117,112 +227,182 @@ class _ReflectionTemplateState extends State<ReflectionTemplate> {
     final description = widget.reflectionData['description'] ?? '';
     final questions = widget.reflectionData['questions'] ?? [];
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black87),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            color: Color(0xFF2C3E50),
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
+    if (questions.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(title: Text(title)),
+        body: Center(child: Text(tr('no_questions_available'))),
+      );
+    }
+
+    final currentQuestion = questions[_currentQuestionIndex];
+    final totalQuestions = questions.length;
+    final progress = (_currentQuestionIndex + 1) / totalQuestions;
+    final isLastQuestion = _currentQuestionIndex == totalQuestions - 1;
+    final canProceed = _canProceedToNext(currentQuestion);
+
+    return GestureDetector(
+      onTap: () {
+        // 키보드 외부를 탭하면 키보드 닫기
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF8F9FA),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black87),
+            onPressed: () => Navigator.pop(context),
           ),
-        ),
-        centerTitle: false,
-        actions: [
-          if (_hasChanges)
-            Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: Center(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.green.shade50,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.cloud_done,
-                        size: 14,
-                        color: Colors.green.shade700,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        tr('auto_saved'),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.green.shade700,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+          title: Text(
+            title,
+            style: const TextStyle(
+              color: Color(0xFF2C3E50),
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // 설명 섹션
-          if (description.isNotEmpty)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    description,
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[700],
-                      height: 1.5,
+          ),
+          centerTitle: false,
+        ),
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                // 진행률 바
+                _buildProgressBar(progress, _currentQuestionIndex + 1, totalQuestions),
+                
+                // 설명 섹션 (첫 번째 질문일 때만)
+                if (_currentQuestionIndex == 0 && description.isNotEmpty)
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    color: Colors.white,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          description,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey[700],
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          
-          // 질문 목록
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: questions.map<Widget>((question) {
-                  return _buildQuestionWidget(question);
-                }).toList(),
-              ),
-            ),
-          ),
-          
-          // 제출 버튼
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, -2),
+                
+                // 현재 질문
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(20),
+                    child: _buildQuestionWidget(currentQuestion),
+                  ),
                 ),
+                
+                // 하단 네비게이션 버튼들
+                _buildNavigationButtons(isLastQuestion, canProceed),
               ],
             ),
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
+            
+            // 축하 애니메이션
+            if (_showCelebration)
+              _buildCelebrationOverlay(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProgressBar(double progress, int current, int total) {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                tr('question_progress'),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Text(
+                '$current/$total',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFF2D6A4F),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          LinearProgressIndicator(
+            value: progress,
+            backgroundColor: Colors.grey.shade200,
+            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF2D6A4F)),
+            minHeight: 8,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavigationButtons(bool isLastQuestion, bool canProceed) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              // 이전 버튼
+              if (_currentQuestionIndex > 0)
+                Expanded(
+                  flex: 1,
+                  child: OutlinedButton(
+                    onPressed: _goToPreviousQuestion,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFF2D6A4F),
+                      side: const BorderSide(color: Color(0xFF2D6A4F)),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      tr('previous'),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              
+              if (_currentQuestionIndex > 0) const SizedBox(width: 12),
+              
+              // 다음/완료 버튼
+              Expanded(
+                flex: 2,
                 child: ElevatedButton(
-                  onPressed: _isSubmitting ? null : _submitReflection,
+                  onPressed: canProceed ? _goToNextQuestion : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isFormValid 
+                    backgroundColor: canProceed 
                         ? const Color(0xFF2D6A4F)
                         : Colors.grey.shade400,
                     foregroundColor: Colors.white,
@@ -231,7 +411,6 @@ class _ReflectionTemplateState extends State<ReflectionTemplate> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     elevation: 0,
-                    minimumSize: const Size(double.infinity, 52),
                   ),
                   child: _isSubmitting
                       ? const SizedBox(
@@ -243,7 +422,7 @@ class _ReflectionTemplateState extends State<ReflectionTemplate> {
                           ),
                         )
                       : Text(
-                          tr('submit_reflection'),
+                          isLastQuestion ? tr('complete_reflection') : tr('next'),
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -252,9 +431,61 @@ class _ReflectionTemplateState extends State<ReflectionTemplate> {
                         ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCelebrationOverlay() {
+    return Container(
+      color: Colors.black.withOpacity(0.3),
+      child: Center(
+        child: Container(
+          margin: const EdgeInsets.all(40),
+          padding: const EdgeInsets.all(30),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2D6A4F).withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check_circle,
+                  size: 40,
+                  color: Color(0xFF2D6A4F),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                tr('great_job'),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF2C3E50),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                tr('question_completed'),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[600],
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -264,16 +495,15 @@ class _ReflectionTemplateState extends State<ReflectionTemplate> {
     final isRequired = question['required'] ?? false;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 24),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -288,26 +518,26 @@ class _ReflectionTemplateState extends State<ReflectionTemplate> {
                 child: Text(
                   question['title'] ?? '',
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
                     color: Color(0xFF2C3E50),
-                    height: 1.4,
+                    height: 1.3,
                   ),
                 ),
               ),
               if (isRequired)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.red.shade50,
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
                     tr('required'),
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 12,
                       color: Colors.red.shade700,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -315,18 +545,18 @@ class _ReflectionTemplateState extends State<ReflectionTemplate> {
           ),
           
           if (question['description'] != null) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             Text(
               question['description'],
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 16,
                 color: Colors.grey[600],
-                height: 1.4,
+                height: 1.5,
               ),
             ),
           ],
           
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           
           // 입력 위젯
           if (type == 'scale')

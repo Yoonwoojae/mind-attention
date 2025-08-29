@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:just_audio/just_audio.dart';
 import '../../../core/utils/translation_utils.dart';
 import '../../../core/utils/logger.dart';
+import 'completion_screen.dart';
 
 class LessonTemplate extends StatefulWidget {
   final String moduleId;
@@ -389,7 +390,7 @@ class _LessonTemplateState extends State<LessonTemplate> {
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: ElevatedButton(
-                    onPressed: _hasReachedEnd ? widget.onComplete : null,
+                    onPressed: _hasReachedEnd ? () => _showCompletionScreen() : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF2D6A4F),
                       foregroundColor: Colors.white,
@@ -896,6 +897,22 @@ class _LessonTemplateState extends State<LessonTemplate> {
     
     return RichText(
       text: TextSpan(children: spans),
+    );
+  }
+
+  void _showCompletionScreen() {
+    // 레슨 완료 시 항상 great 타입으로 표시
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => CompletionScreen(
+          type: CompletionType.great,
+          onContinue: () {
+            Navigator.of(context).pop(); // 완료 화면 닫기
+            Navigator.of(context).pop(); // 레슨 화면 닫기
+            widget.onComplete(); // 원래 콜백 호출
+          },
+        ),
+      ),
     );
   }
 }

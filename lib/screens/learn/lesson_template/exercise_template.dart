@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import '../../../core/utils/translation_utils.dart';
 import '../../../core/utils/logger.dart';
+import 'completion_screen.dart';
 
 class ExerciseTemplate extends StatefulWidget {
   final String moduleId;
@@ -1202,7 +1203,7 @@ class _ExerciseTemplateState extends State<ExerciseTemplate> with TickerProvider
               
               // 계속 버튼
               ElevatedButton(
-                onPressed: widget.onComplete,
+                onPressed: () => _showCompletionScreen(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2D6A4F),
                   foregroundColor: Colors.white,
@@ -1227,5 +1228,43 @@ class _ExerciseTemplateState extends State<ExerciseTemplate> with TickerProvider
         ),
       ),
     );
+  }
+
+  void _showCompletionScreen() {
+    // 운동/실습 결과에 따라 완료 타입 결정
+    final completionType = _determineCompletionType();
+    
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => CompletionScreen(
+          type: completionType,
+          onContinue: () {
+            Navigator.of(context).pop(); // 완료 화면 닫기
+            Navigator.of(context).pop(); // 운동 화면 닫기
+            widget.onComplete(); // 원래 콜백 호출
+          },
+        ),
+      ),
+    );
+  }
+
+  CompletionType _determineCompletionType() {
+    final questions = widget.exerciseData['questions'] ?? [];
+    if (questions.isEmpty) {
+      return CompletionType.great; // 기본값
+    }
+
+    final totalQuestions = questions.length;
+    final correctRate = _correctAnswers / totalQuestions;
+    
+    if (correctRate >= 0.9) {
+      return CompletionType.perfect; // 90% 이상 정답
+    } else if (correctRate >= 0.7) {
+      return CompletionType.great; // 70% 이상 정답
+    } else if (correctRate >= 0.5) {
+      return CompletionType.encourage; // 50% 이상 노력
+    } else {
+      return CompletionType.enough; // 많이 틀렸지만 충분히 노력함
+    }
   }
 }
